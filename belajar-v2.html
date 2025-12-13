@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h3>Contoh If: Bilangan Positif atau Negatif</h3>
+    <input type="number" id="angka" placeholder="Masukkan angka" />
+    <button onclick="cekAngka()">Cek</button>
+    <p id="hasil"></p>
+    <script>
+      function cekAngka() {
+        let a = document.getElementById("angka").value;
+        if (a > 0) {
+          document.getElementById("hasil").innerHTML = "Angka positif";
+        } else if (a < 0) {
+          document.getElementById("hasil").innerHTML = "Angka negatif";
+        } else {
+          document.getElementById("hasil").innerHTML = "Angka nol";
+        }
+      }
+    </script>
+  </body>
+</html>

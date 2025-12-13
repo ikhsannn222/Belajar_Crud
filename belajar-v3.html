@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h3>Contoh If: Penilaian Nilai Huruf</h3>
+    <input type="number" id="nilai" placeholder="Masukkan nilai (0-100)" />
+    <button onclick="cekNilai()">Cek Nilai</button>
+    <p id="hasil"></p>
+    <script>
+      function cekNilai() {
+        let n = document.getElementById("nilai").value;
+        let grade;
+        if (n >= 85) grade = "A";
+        else if (n >= 70) grade = "B";
+        else if (n >= 55) grade = "C";
+        else if (n >= 40) grade = "D";
+        else grade = "E";
+        document.getElementById("hasil").innerHTML = "Nilai huruf: " + grade;
+      }
+    </script>
+  </body>
+</html>

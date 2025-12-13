@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <label>Nama: </label>
+    <input type="text" id="nama" />
+
+    <label>Umur: </label>
+    <input type="number" id="umur" />
+
+    <label>IPK: </label>
+    <input type="number" id="ipk" step="0.01" />
+
+    <button onclick="tambahmhs()">Tambah</button>
+
+    <div id="data"></div>
+
+    <script>
+      let data = []; // array mahasiswa
+
+      function tambahmhs() {
+        // Ambil input
+        const nama = document.getElementById("nama").value.trim();
+        const umur = parseInt(document.getElementById("umur").value);
+        const ipk = parseFloat(document.getElementById("ipk").value);
+
+        // Validasi sederhana
+        if (!nama || isNaN(umur) || isNaN(ipk)) {
+          alert("Isi semua data dengan benar!");
+          return;
+        }
+
+        // Masukkan ke array
+        data.push({ nama, umur, ipk });
+
+        // Reset form
+        document.getElementById("nama").value = "";
+        document.getElementById("umur").value = "";
+        document.getElementById("ipk").value = "";
+
+        tampilkanData();
+      }
+
+      function tampilkanData() {
+        if (data.length === 0) {
+          document.getElementById("data").innerHTML = "<p>Belum ada data.</p>";
+          return;
+        }
+
+        // Buat tabel
+        let html = "<h2>Data Mahasiswa</h2>";
+        html += "<table border='1' cellpadding='5'>";
+        html += "<tr><th>No</th><th>Nama</th><th>Umur</th><th>IPK</th></tr>";
+
+        data.forEach((mhs, index) => {
+          html += `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${mhs.nama}</td>
+              <td>${mhs.umur}</td>
+              <td>${mhs.ipk}</td>
+            </tr>
+          `;
+        });
+
+        html += "</table>";
+
+        // Mencari IPK tertinggi
+        let tertinggi = data.reduce((max, m) => (m.ipk > max.ipk ? m : max));
+
+        html += `<p><b>IPK Tertinggi:</b> ${tertinggi.nama} (${tertinggi.ipk})</p>`;
+
+        // Sorting berdasarkan nama
+        let dataSortedNama = [...data].sort((a, b) =>
+          a.nama.localeCompare(b.nama)
+        );
+
+        html += "<h3>Urut Berdasarkan Nama</h3>";
+        html += "<table border='1' cellpadding='5'>";
+        html += "<tr><th>Nama</th><th>Umur</th><th>IPK</th></tr>";
+
+        dataSortedNama.forEach((mhs) => {
+          html += `
+            <tr>
+              <td>${mhs.nama}</td>
+              <td>${mhs.umur}</td>
+              <td>${mhs.ipk}</td>
+            </tr>
+          `;
+        });
+
+        html += "</table>";
+
+        document.getElementById("data").innerHTML = html;
+      }
+    </script>
+  </body>
+</html>

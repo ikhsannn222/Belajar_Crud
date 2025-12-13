@@ -1,0 +1,179 @@
+  <!DOCTYPE html>
+  <html lang="id">
+    <head>
+      <meta charset="UTF-8" />
+      <title>Manajemen Nilai Mahasiswa</title>
+      <style>
+        body {
+          font-family: Arial;
+          margin: 30px;
+          background: #f7f7f7;
+        }
+        h1 {
+          text-align: center;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+        }
+        th,
+        td {
+          border: 1px solid #ccc;
+          padding: 8px;
+          text-align: center;
+        }
+        th {
+          background-color: #007bff;
+          color: white;
+        }
+        input {
+          padding: 6px;
+          margin: 4px;
+        }
+        button {
+          padding: 6px 10px;
+          cursor: pointer;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>Program Manajemen Nilai Mahasiswa</h1>
+
+      <label>NIM: </label>
+      <input type="number" id="nim" />
+      <label>Nama: </label>
+      <input type="text" id="nama" />
+      <label>Nilai: </label>
+      <input type="number" id="nilai" min="0" max="100" />
+      <button onclick="tambahmhs()">Tambah</button>
+
+      <div id="hasil"></div>
+
+      <script>
+        let daftarmhs = [];
+        let daftarmhsSorted = [];
+
+        function tambahmhs() {
+          const nim = document.getElementById("nim").value.trim();
+          const nama = document.getElementById("nama").value.trim();
+          const nilai = parseInt(document.getElementById("nilai").value);
+
+          if (
+            nim === "" ||
+            nama === "" ||
+            isNaN(nilai) ||
+            nilai < 0 ||
+            nilai > 100
+          ) {
+            alert("Masukkan NIM, nama, dan nilai 0–100!");
+            return;
+          }
+
+          daftarmhs.push({ nim: nim, nama: nama, nilai: nilai });
+          daftarmhsSorted = [...daftarmhs].sort((a, b) => b.nilai - a.nilai);
+
+          document.getElementById("nim").value = "";
+          document.getElementById("nama").value = "";
+          document.getElementById("nilai").value = "";
+
+          tampilkanData();
+        }
+
+        function kategori(nilai) {
+          if (nilai >= 90) return "A";
+          else if (nilai >= 80) return "B";
+          else if (nilai >= 70) return "AB";
+          else if (nilai >= 60) return "C";
+          else return "D";
+        }
+
+        function tampilkanData() {
+          if (daftarmhs.length === 0) {
+            document.getElementById("hasil").innerHTML = "<p>Belum ada data.</p>";
+            return;
+          }
+
+          let total = 0;
+          
+          let tabelOriginal = `<h3>Data Sesuai Input</h3>
+          <table>
+            <tr><th>No</th><th>NIM</th><th>Nama</th><th>Nilai</th><th>Kategori</th></tr>`;
+
+          daftarmhs.forEach((m, i) => {
+            total += m.nilai;
+            tabelOriginal += `<tr>
+              <td>${i + 1}</td>
+              <td>${m.nim}</td>
+              <td>${m.nama}</td>
+              <td>${m.nilai}</td>
+              <td>${kategori(m.nilai)}</td>
+            </tr>`;
+          });
+
+          tabelOriginal += `</table>`;
+
+          let tabelRank = `<h3>Ranking Nilai Tertinggi</h3>
+          <table>
+            <tr><th>No</th><th>NIM</th><th>Nama</th><th>Nilai</th><th>Kategori</th></tr>`;
+
+          daftarmhsSorted.forEach((m, i) => {
+            tabelRank += `<tr>
+              <td>${i + 1}</td>
+              <td>${m.nim}</td>
+              <td>${m.nama}</td>
+              <td>${m.nilai}</td>
+              <td>${kategori(m.nilai)}</td>
+            </tr>`;
+          });
+
+          tabelRank += `</table>`;
+
+          let nilaiSorted = daftarmhs.map((m) => m.nilai).sort((a, b) => a - b);
+
+          let tabelAsc = `<h3>Nilai Dari Terendah ke Tertinggi</h3>
+          <table>
+            <tr><th>No</th><th>NIM</th><th>Nama</th><th>Nilai</th></tr>`;
+
+          daftarmhs
+            .slice()
+            .sort((a, b) => a.nilai - b.nilai)
+            .forEach((m, i) => {
+              tabelAsc += `<tr>
+                <td>${i + 1}</td>
+                <td>${m.nim}</td>
+                <td>${m.nama}</td>
+                <td>${m.nilai}</td>
+              </tr>`;
+            });
+
+          tabelAsc += `</table>`;
+
+          let rata = nilaiSorted.reduce((a, b) => a + b, 0) / nilaiSorted.length;
+
+          let nearest = nilaiSorted[0];
+          let selisihMin = Math.abs(nilaiSorted[0] - rata);
+
+          for (let i = 1; i < nilaiSorted.length; i++) {
+            let selisih = Math.abs(nilaiSorted[i] - rata);
+
+            if (
+              selisih < selisihMin ||
+              (selisih === selisihMin && nilaiSorted[i] > nearest)
+            ) {
+              nearest = nilaiSorted[i];
+              selisihMin = selisih;
+            }
+          }
+
+          let median = nearest;
+
+          let info = `<p><b>Rata-rata:</b> ${rata.toFixed(2)} |
+              <b>Nilai Tengah (Median):</b> ${median}</p>`;
+
+          document.getElementById("hasil").innerHTML =
+            tabelOriginal + tabelRank + tabelAsc + info;
+        }
+      </script>
+    </body>
+  </html>

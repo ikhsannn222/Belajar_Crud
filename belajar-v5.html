@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h3>Contoh Looping: Menampilkan Angka 1–10</h3>
+    <button onclick="tampilkanAngka()">Tampilkan</button>
+    <p id="hasil"></p>
+    <script>
+      function tampilkanAngka() {
+        let teks = "";
+        for (let i = 1; i <= 10; i++) {
+          teks += i + " ";
+        }
+        document.getElementById("hasil").innerHTML = teks;
+      }
+    </script>
+  </body>
+</html>

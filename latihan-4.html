@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Segitiga Bintang Terbalik</title>
+<style>
+    pre {
+        line-height: 1;
+        font-family: monospace;
+        white-space: pre;
+    }
+</style>
+</head>
+<body>
+    <h1>Segitiga Bintang Terbalik</h1>
+    <label for="tinggi">Masukkan tinggi:</label>
+    <input type="number" id="tinggi" min="1">
+    <button onclick="tampilkanSegitiga()">Tampilkan</button>
+    <center><div id="hasil"></div></center>
+    <script>
+        function tampilkanSegitiga() {
+            const tinggi = parseInt(document.getElementById("tinggi").value);
+            const hasilDiv = document.getElementById("hasil");
+            hasilDiv.innerHTML = "";
+
+            if (isNaN(tinggi) || tinggi <= 0) {
+                hasilDiv.innerHTML = "<p>Mohon masukkan angka yang valid untuk tinggi.</p>";
+                return;
+            }
+            let output = "<pre>";
+            for (let i = tinggi; i >= 1; i--) {
+                for (let k = 0; k < i; k++) {
+                    output += "*";
+                }
+                output += "\n";
+            }
+           
+            output += "</pre>";
+            hasilDiv.innerHTML = output; 
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tabel Perkalian</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 50%;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Buat Tabel Perkalian</h2>
+    <label for="angkaPengguna">Masukkan angka:</label>
+    <input type="number" id="angkaPengguna" name="angkaPengguna" value="5" />
+    <button onclick="tampilkanTabel()">Tampilkan Tabel</button>
+    <div id="tabelPerkalian"></div>
+    <script>
+      function tampilkanTabel() {
+        const angka = parseInt(document.getElementById("angkaPengguna").value);
+        const tabelContainer = document.getElementById("tabelPerkalian");
+        let tabelHTML = "<table>";
+        if (isNaN(angka)) {
+          tabelContainer.innerHTML =
+            "<p>Silakan masukkan angka yang valid.</p>";
+          return;
+        }
+
+        for (let i = 1; i <= 10; i++) {
+          let hasil = angka * i;
+          tabelHTML += "<tr>";
+          tabelHTML += `<td>${angka} x ${i}</td>`;
+          tabelHTML += `<td>=</td>`;
+          tabelHTML += `<td>${hasil}</td>`;
+          tabelHTML += "</tr>";
+        }
+        tabelHTML += "</table>";
+        tabelContainer.innerHTML = tabelHTML;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Diskon Sederhana</title>
+  </head>
+
+  <body>
+    <h1>Latihan Pemrograman</h1>
+
+    <!-- FORM UNTUK INPUT HARGA -->
+    <form id="formDiskon" onsubmit="cekHarga(event)">
+      <label for="harga">Masukkan Harga:</label>
+      <input type="number" id="harga" name="harga" placeholder="Contoh: 150000" required />
+
+      <br><br>
+
+      <button type="submit">Cek Harga</button>
+    </form>
+
+    <hr>
+
+    <!-- TEMPAT MENAMPILKAN HASIL -->
+    <p id="hasil"></p>
+
+    <script>
+      function cekHarga(event) {
+        event.preventDefault(); // mencegah form dari reload halaman
+
+        // Ambil nilai input harga
+        let harga = Number(document.getElementById("harga").value);
+
+        // Validasi input
+        if (isNaN(harga) || harga <= 0) {
+          document.getElementById("hasil").innerHTML =
+            "<span style='color:red;'>⚠️ Masukkan angka harga yang benar!</span>";
+          return;
+        }
+
+        // Variabel diskon (default = 0)
+        let disc = 0;
+
+        // Jika harga lebih dari atau sama dengan 100000
+        if (harga >= 100000) {
+          disc = 0.20; // 20%
+        }
+
+        // Hitung potongan dan harga akhir
+        let potongan = harga * disc;
+        let hargaAkhir = harga - potongan;
+
+        // Tampilkan hasil
+        document.getElementById("hasil").innerHTML =
+          "Diskon: " + (disc * 100) + "%<br>" +
+          "Potongan: Rp " + potongan + "<br>" +
+          "Total Bayar: Rp " + hargaAkhir;
+      }
+    </script>
+
+  </body>
+</html>

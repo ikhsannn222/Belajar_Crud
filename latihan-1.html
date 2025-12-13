@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latian-1</title>
+</head>
+<body>
+    <p><h2>Lulus atau tidak?</h2></p>
+    <input type="number" id="angka" placeholder="Masukkan Nilai"/>
+    <button onclick="cekHasil()">Cek</button>
+    <p id="hasil"></p>
+
+    <script>
+        function cekHasil() {
+        let a = document.getElementById("angka").value;
+        if (a >= 60) {
+          document.getElementById("hasil").innerHTML = "Selamat anda lulus";
+        } else if (a <= 60) {
+          document.getElementById("hasil").innerHTML = "Maaf anda belum dinyatakan lulus";
+        } else {
+          document.getElementById("hasil").innerHTML = "Masukan angka";
+        }
+      }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Belajar Pengkondisian dan Perulangan</title>
+  </head>
+  <body>
+    <h2>Belajar If dan Loop di JavaScript</h2>
+    <form id="cekNilai()">Cek Nilai</form>
+    <form id="tampilkanAngka">Tampilkan Angka</form>
+    <script>
+      // Contoh Pengkondisian
+      function cekNilai() {
+        let nilai = prompt("Masukkan nilai (0-100):");
+        if (nilai <= 50) {
+          alert("Nilai Anda C");
+        } else if (nilai <= 70) {
+          alert("Nilai Anda B");
+        } else {
+          alert("Nilai Anda A");
+        }
+      }
+      // Contoh Perulangan
+      function tampilkanAngka() {
+        let hasil = "";
+        for (let i = 1; i <= 5; i++) {
+          hasil += "Angka ke-" + i + "\n";
+        }
+        alert(hasil);
+      }
+    </script>
+  </body>
+</html>

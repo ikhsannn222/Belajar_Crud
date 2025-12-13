@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h3>Contoh Looping: Bilangan Genap 1–20</h3>
+    <button onclick="tampilkanGenap()">Tampilkan</button>
+    <p id="hasil"></p>
+    <script>
+      function tampilkanGenap() {
+        let hasil = "";
+        for (let i = 1; i <= 20; i++) {
+          if (i % 2 == 0) {
+            hasil += i + " ";
+          }
+        }
+        document.getElementById("hasil").innerHTML = hasil;
+      }
+    </script>
+  </body>
+</html>

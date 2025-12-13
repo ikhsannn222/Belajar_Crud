@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p><h2>Kategori Usia</h2></p>
+    <input type="number" id="usia" placeholder="Masukkan Usia" />
+    <button onclick="cekUsia()">Cek Usia</button>
+    <p id="hasil"></p>
+    <script>
+      function cekUsia() {
+        let n = document.getElementById("usia").value;
+        let ket;
+        if (n <= 5) ket = "Balita";
+        else if (n <= 12) ket = "Anak Anak";
+        else if (n <= 17) ket = "Remaja";
+        else if (n <= 59) ket = "Dewasa";
+        else ket = "Lansia";
+        document.getElementById("hasil").innerHTML = "Keterangan : " + ket;
+      }
+    </script>
+</body>
+</html>
