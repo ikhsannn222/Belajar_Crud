@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Transformasi Larik Bersyarat</title>
+</head>
+<body>
+  <h2>Transformasi Larik dengan Rumus Bersyarat</h2>
+
+  <button onclick="transformasiLarik()">
+    Proses Transformasi
+  </button>
+
+  <ul id="larikBaru"></ul>
+  <p id="total"></p>
+
+  <script>
+    function transformasiLarik() {
+      let data = [2, 5, 8, 11, 14];
+      let hasil = [];
+      let total = 0;
+
+      // Proses transformasi
+      for (let i = 0; i < data.length; i++) {
+        let nilai;
+
+        if (data[i] % 2 === 0) {
+          nilai = data[i] * data[i];
+        } else {
+          nilai = (2 * data[i]) + 3;
+        }
+
+        hasil.push(nilai);
+        total = total + nilai;
+      }
+      
+      let output = "";
+      for (let i = 0; i < hasil.length; i++) {
+        output += "<li>Elemen ke-" + i + ": " + hasil[i] + "</li>";
+      }
+
+      document.getElementById("larikBaru").innerHTML = output;
+      document.getElementById("total").innerHTML =
+        "Total hasil transformasi: <b>" + total + "</b>";
+    }
+  </script>
+</body>
+</html>

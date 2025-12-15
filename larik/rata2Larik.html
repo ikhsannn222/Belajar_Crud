@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h3>Rata-rata Nilai</h3>
+<button onclick="hitungRata()">Hitung</button>
+<p id="hasil"></p>
+
+<script>
+function hitungRata() {
+  let nilai = [80, 70, 90, 85];
+  let total = 0;
+
+  for (let i = 0; i < nilai.length; i++) {
+    total += nilai[i];
+  }
+
+  let rata = total / nilai.length;
+  document.getElementById("hasil").innerHTML = "Rata-rata = " + rata;
+}
+</script>
+</body>
+</html>

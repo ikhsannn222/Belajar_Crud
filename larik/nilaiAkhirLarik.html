@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h3>Nilai Akhir Mahasiswa</h3>
+<button onclick="hitungAkhir()">Hitung</button>
+<p id="hasil"></p>
+
+<script>
+function hitungAkhir() {
+  let tugas = [80, 75, 90];
+  let uts = 85;
+  let uas = 88;
+
+  let totalTugas = 0;
+  for (let i = 0; i < tugas.length; i++) {
+    totalTugas += tugas[i];
+  }
+
+  let rataTugas = totalTugas / tugas.length;
+  let nilaiAkhir = (rataTugas * 0.3) + (uts * 0.3) + (uas * 0.4);
+
+  document.getElementById("hasil").innerHTML = "Nilai Akhir = " + nilaiAkhir;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h3>Jumlah Bilangan Genap</h3>
+<button onclick="hitungGenap()">Hitung</button>
+<p id="hasil"></p>
+
+<script>
+function hitungGenap() {
+  let C = [1, 2, 3, 4, 5, 6];
+  let jumlah = 0;
+
+  for (let i = 0; i < C.length; i++) {
+    if (C[i] % 2 === 0) {
+      jumlah += C[i];
+    }
+  }
+
+  document.getElementById("hasil").innerHTML = "Jumlah bilangan genap = " + jumlah;
+}
+</script>
+</body>
+</html>

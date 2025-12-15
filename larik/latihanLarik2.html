@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Normalisasi Data Larik</title>
+</head>
+<body>
+  <h2>Normalisasi Data</h2>
+
+  <button onclick="normalisasiData()">
+    Proses Normalisasi
+  </button>
+
+  <ul id="hasil"></ul>
+
+  <script>
+    function normalisasiData() {
+      let data = [12, 18, 25, 10, 20];
+
+      let min = data[0];
+      let max = data[0];
+
+      for (let i = 1; i < data.length; i++) {
+        if (data[i] < min) {
+          min = data[i];
+        }
+
+        if (data[i] > max) {
+          max = data[i];
+        }
+      }
+
+      let output = "";
+      for (let i = 0; i < data.length; i++) {
+        let normalisasi = (data[i] - min) / (max - min);
+        output += "<li>Data " + data[i] + 
+                  " → " + normalisasi.toFixed(3) + "</li>";
+      }
+
+      document.getElementById("hasil").innerHTML = output;
+    }
+  </script>
+</body>
+</html>

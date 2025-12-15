@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Skor Akhir Multi-Larik</title>
+</head>
+<body>
+  <h2>Perhitungan Skor Akhir Mahasiswa</h2>
+
+  <button onclick="hitungSkor()">
+    Hitung Skor Akhir
+  </button>
+
+  <ul id="hasil"></ul>
+  <p id="total"></p>
+
+  <script>
+    function hitungSkor() {
+      let tugas = [80, 70, 90, 85];
+      let uts   = [75, 65, 88, 80];
+      let uas   = [85, 78, 92, 90];
+
+      let skor = [];
+      let totalSkor = 0;
+
+      for (let i = 0; i < tugas.length; i++) {
+        let nilai =
+          (0.3 * tugas[i]) +
+          (0.3 * uts[i]) +
+          (0.4 * uas[i]);
+
+        skor.push(nilai);
+        totalSkor = totalSkor + nilai;
+      }
+
+      let output = "";
+      for (let i = 0; i < skor.length; i++) {
+        output += "<li>Mahasiswa ke-" + (i + 1) +
+                  " → Skor Akhir: " +
+                  skor[i].toFixed(2) + "</li>";
+      }
+
+      document.getElementById("hasil").innerHTML = output;
+      document.getElementById("total").innerHTML =
+        "Total skor seluruh mahasiswa: <b>" +
+        totalSkor.toFixed(2) + "</b>";
+    }
+  </script>
+</body>
+</html>

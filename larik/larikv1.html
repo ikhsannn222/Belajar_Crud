@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Algoritma Larik</title>
+</head>
+<body>
+  <h2>Data Nilai Mahasiswa</h2>
+  <button onclick="tampilkanNilai()">Tampilkan Nilai</button>
+  <p id="hasil"></p>
+
+  <script>
+    function tampilkanNilai() {
+      let nilai = [80, 75, 90, 85];
+      let total = 0;
+      let output = "Nilai: <br>";
+
+      for (let i = 0; i < nilai.length; i++) {
+        output += "Nilai ke-" + (i+1) + " = " + nilai[i] + "<br>";
+        total += nilai[i];
+      }
+
+      let rata = total / nilai.length;
+      output += "<br>Rata-rata = " + rata;
+
+      document.getElementById("hasil").innerHTML = output;
+    }
+  </script>
+</body>
+</html>

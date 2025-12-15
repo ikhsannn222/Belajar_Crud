@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Weighted Moving Average</title>
+</head>
+<body>
+  <h2>Weighted Moving Average (WMA)</h2>
+
+  <button onclick="hitungWMA()">
+    Hitung WMA
+  </button>
+
+  <p id="hasil"></p>
+
+  <script>
+    function hitungWMA() {
+      let data = [10, 20, 30, 40, 50];
+
+      let totalBobot = 0;
+      let totalWMA = 0;
+
+      for (let i = 0; i < data.length; i++) {
+        let bobot = i + 1;
+
+        totalWMA = totalWMA + (data[i] * bobot);
+        totalBobot = totalBobot + bobot;
+      }
+
+      let wma = totalWMA / totalBobot;
+
+      document.getElementById("hasil").innerHTML =
+        "Nilai Weighted Moving Average adalah: <b>" +
+        wma.toFixed(2) + "</b>";
+    }
+  </script>
+</body>
+</html>

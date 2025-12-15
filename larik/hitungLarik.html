@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h3>Jumlah Elemen Larik</h3>
+<button onclick="hitungJumlah()">Hitung</button>
+<p id="hasil"></p>
+
+<script>
+function hitungJumlah() {
+  let A = [10, 20, 30, 40, 50];
+  let total = 0;
+
+  for (let i = 0; i < A.length; i++) {
+    total += A[i];
+  }
+
+  document.getElementById("hasil").innerHTML = "Total = " + total;
+}
+</script>
+</body>
+</html>

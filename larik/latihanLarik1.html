@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Nilai Akhir Berbobot Dinamis</title>
+</head>
+<body>
+  <h2>Hitung Nilai Akhir Berbobot</h2>
+
+  <button onclick="hitungNilaiAkhir()">
+    Hitung Nilai Akhir
+  </button>
+
+  <p id="hasil"></p>
+
+  <script>
+    function hitungNilaiAkhir() {
+      let nilai = [78, 85, 90, 66, 88];
+
+      let jumlahData = nilai.length;
+      let nilaiAkhir = 0;
+
+      for (let i = 0; i < jumlahData; i++) {
+        let bobot = (i + 1) / jumlahData;
+        nilaiAkhir = nilaiAkhir + (nilai[i] * bobot);
+      }
+
+      document.getElementById("hasil").innerHTML =
+        "Nilai akhir berbobot adalah: <b>" + nilaiAkhir.toFixed(2) + "</b>";
+    }
+  </script>
+</body>
+</html>

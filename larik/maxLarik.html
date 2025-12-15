@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h3>Nilai Terbesar</h3>
+<button onclick="cariMax()">Cari</button>
+<p id="hasil"></p>
+
+<script>
+function cariMax() {
+  let B = [12, 45, 7, 30, 25];
+  let max = B[0];
+
+  for (let i = 1; i < B.length; i++) {
+    if (B[i] > max) {
+      max = B[i];
+    }
+  }
+
+  document.getElementById("hasil").innerHTML = "Nilai terbesar = " + max;
+}
+</script>
+</body>
+</html>
