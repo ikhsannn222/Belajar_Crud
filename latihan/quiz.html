@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analisis Nilai Mahasiswa</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    th, td {
+      border: 1px solid #444;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 6px;
+      border: 1px solid #444;
+      border-radius: 4px;
+    }
+    button {
+      margin-right: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background-color: #f0f0f0;
+    }
+    button:hover {
+      background-color: #e0e0e0;
+    }
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .lulus {
+      color: green;
+      font-weight: bold;
+    }
+    .tidak-lulus {
+      color: red;
+      font-weight: bold;
+    }
+    hr {
+      margin: 20px 0;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <h3>Input Data Mahasiswa</h3>
+
+  <div class="form-group">
+    <label for="nim">NIM</label>
+    <input type="text" id="nim" placeholder="contoh: 2301001">
+  </div>
+
+  <div class="form-group">
+    <label for="nama">Nama</label>
+    <input type="text" id="nama" placeholder="Masukan Nama">
+  </div>
+
+  <div class="form-group">
+    <label for="tugas">Nilai Tugas</label>
+    <input type="number" id="tugas" placeholder="0-100">
+  </div>
+
+  <div class="form-group">
+    <label for="uts">Nilai UTS</label>
+    <input type="number" id="uts" placeholder="0-100">
+  </div>
+
+  <div class="form-group">
+    <label for="uas">Nilai UAS</label>
+    <input type="number" id="uas" placeholder="0-100">
+  </div>
+
+  <button onclick="tambahMahasiswa()">Tambah</button>
+  <hr>
+  <div id="hasil"></div>
+  <div id="info"></div>
+
+  <script>
+    let mahasiswa = [];
+
+    function tambahMahasiswa() {
+      let nim = document.getElementById("nim").value.trim();
+      let nama = document.getElementById("nama").value.trim();
+      let tugas = document.getElementById("tugas").value;
+      let uts = document.getElementById("uts").value;
+      let uas = document.getElementById("uas").value;
+
+      if (nim === "" || nama === "" || tugas === "" || uts === "" || uas === "") {
+        Swal.fire({
+          icon: "warning",
+          title: "Data tidak lengkap",
+          text: "Semua field harus diisi!",
+        });
+        return;
+      }
+
+      if (tugas < 0 || tugas > 100 || uts < 0 || uts > 100 || uas < 0 || uas > 100) {
+        Swal.fire({
+          icon: "error",
+          title: "Nilai tidak valid",
+          text: "Nilai harus antara 0-100!",
+        });
+        return;
+      }
+
+      mahasiswa.push({
+        nim: nim,
+        nama: nama,
+        nilai: [parseFloat(tugas), parseFloat(uts), parseFloat(uas)],
+        isEditing: false
+      });
+
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil!",
+        text: "Data mahasiswa berhasil ditambahkan",
+        timer: 1200,
+        showConfirmButton: false,
+      });
+
+      document.getElementById("nim").value = "";
+      document.getElementById("nama").value = "";
+      document.getElementById("tugas").value = "";
+      document.getElementById("uts").value = "";
+      document.getElementById("uas").value = "";
+
+      tampilkanData();
+    }
+
+
+    function hitungNilaiAkhir(nilaiArray) {
+      let tugas = nilaiArray[0];
+      let uts = nilaiArray[1];
+      let uas = nilaiArray[2];
+      return 0.3 * tugas + 0.3 * uts + 0.4 * uas;
+    }
+
+    function tentukanGrade(nilaiAkhir) {
+      if (nilaiAkhir >= 85) return "A";
+      else if (nilaiAkhir >= 75) return "B";
+      else if (nilaiAkhir >= 65) return "C";
+      else if (nilaiAkhir >= 50) return "D";
+      else return "E";
+    }
+
+    function tentukanStatus(nilaiAkhir) {
+      return nilaiAkhir >= 65 ? "LULUS" : "TIDAK LULUS";
+    }
+
+    function hitungRataRata() {
+      let total = 0;
+      for (let i = 0; i < mahasiswa.length; i++) {
+        let nilaiAkhir = hitungNilaiAkhir(mahasiswa[i].nilai);
+        total = total + nilaiAkhir;
+      }
+      return total / mahasiswa.length;
+    }
+
+    function cariNilaiTertinggi() {
+      let maxNilai = 0;
+      let mahasiswaTerbaik = "";
+      for (let i = 0; i < mahasiswa.length; i++) {
+        let nilaiAkhir = hitungNilaiAkhir(mahasiswa[i].nilai);
+        if (nilaiAkhir > maxNilai) {
+          maxNilai = nilaiAkhir;
+          mahasiswaTerbaik = mahasiswa[i].nama;
+        }
+      }
+      return { nama: mahasiswaTerbaik, nilai: maxNilai };
+    }
+
+    function cariNilaiTengah() {
+      if (mahasiswa.length === 0) return 0;
+
+      let nilaiSorted = [];
+      for (let i = 0; i < mahasiswa.length; i++) {
+        let nilaiAkhir = hitungNilaiAkhir(mahasiswa[i].nilai);
+        nilaiSorted.push(nilaiAkhir);
+      }
+
+      for (let i = 0; i < nilaiSorted.length - 1; i++) {
+        for (let j = 0; j < nilaiSorted.length - i - 1; j++) {
+          if (nilaiSorted[j] > nilaiSorted[j + 1]) {
+            let temp = nilaiSorted[j];
+            nilaiSorted[j] = nilaiSorted[j + 1];
+            nilaiSorted[j + 1] = temp;
+          }
+        }
+      }
+
+      let total = 0;
+      for (let i = 0; i < nilaiSorted.length; i++) {
+        total = total + nilaiSorted[i];
+      }
+      let rata = total / nilaiSorted.length;
+
+      let nearest = nilaiSorted[0];
+      let selisihMin = Math.abs(nilaiSorted[0] - rata);
+
+      for (let i = 1; i < nilaiSorted.length; i++) {
+        let selisih = Math.abs(nilaiSorted[i] - rata);
+        if (selisih < selisihMin || (selisih === selisihMin && nilaiSorted[i] > nearest)) {
+          nearest = nilaiSorted[i];
+          selisihMin = selisih;
+        }
+      }
+
+      return nearest;
+    }
+
+    function escapeHtml(text) {
+      if (typeof text !== "string") return text;
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function mulaiEdit(index) {
+      mahasiswa.forEach((m) => (m.isEditing = false));
+      mahasiswa[index].isEditing = true;
+
+      Swal.fire({
+        icon: "info",
+        title: "Mode Edit",
+        text: "Silakan ubah data pada baris tersebut.",
+        timer: 1200,
+        showConfirmButton: false,
+      });
+
+      tampilkanData();
+    }
+
+    function batalEdit(index) {
+      mahasiswa[index].isEditing = false;
+      tampilkanData();
+    }
+
+    function simpan(index) {
+      const nimEl = document.getElementById(`edit-nim-${index}`);
+      const namaEl = document.getElementById(`edit-nama-${index}`);
+      const tugasEl = document.getElementById(`edit-tugas-${index}`);
+      const utsEl = document.getElementById(`edit-uts-${index}`);
+      const uasEl = document.getElementById(`edit-uas-${index}`);
+
+      const nimBaru = nimEl.value.trim();
+      const namaBaru = namaEl.value.trim();
+      const tugasBaru = parseFloat(tugasEl.value);
+      const utsBaru = parseFloat(utsEl.value);
+      const uasBaru = parseFloat(uasEl.value);
+
+      if (nimBaru === "" || namaBaru === "" || isNaN(tugasBaru) || isNaN(utsBaru) || isNaN(uasBaru)) {
+        Swal.fire({
+          icon: "warning",
+          title: "Data tidak lengkap",
+          text: "Isi semua field dengan benar!",
+        });
+        return;
+      }
+
+      if (tugasBaru < 0 || tugasBaru > 100 || utsBaru < 0 || utsBaru > 100 || uasBaru < 0 || uasBaru > 100) {
+        Swal.fire({
+          icon: "error",
+          title: "Nilai tidak valid",
+          text: "Nilai harus antara 0-100!",
+        });
+        return;
+      }
+
+      mahasiswa[index].nim = nimBaru;
+      mahasiswa[index].nama = namaBaru;
+      mahasiswa[index].nilai = [tugasBaru, utsBaru, uasBaru];
+      mahasiswa[index].isEditing = false;
+
+      Swal.fire({
+        icon: "success",
+        title: "Tersimpan!",
+        text: "Data berhasil diperbarui.",
+        timer: 1000,
+        showConfirmButton: false,
+      });
+
+      tampilkanData();
+    }
+
+    function hapus(index) {
+      Swal.fire({
+        title: `Hapus data "${mahasiswa[index].nama}"?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Hapus",
+        cancelButtonText: "Batal",
+      }).then((res) => {
+        if (res.isConfirmed) {
+          mahasiswa.splice(index, 1);
+
+          Swal.fire({
+            icon: "success",
+            title: "Terhapus!",
+            text: "Data berhasil dihapus.",
+            timer: 1200,
+            showConfirmButton: false,
+          });
+
+          tampilkanData();
+        }
+      });
+    }
+
+    function tampilkanTabel1(dataMahasiswa) {
+      let html = "<h3>Tabel 1 - Data Asli</h3>";
+      html += "<table><tr><th>No</th><th>NIM</th><th>Nama</th><th>Tugas</th><th>UTS</th><th>UAS</th><th>Nilai Akhir</th><th>Grade</th><th>Status</th><th>Aksi</th></tr>";
+
+      dataMahasiswa.forEach((m, i) => {
+        if (m.isEditing) {
+          let nilaiAkhir = hitungNilaiAkhir(m.nilai);
+          let grade = tentukanGrade(nilaiAkhir);
+          let status = tentukanStatus(nilaiAkhir);
+          
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td><input type="text" id="edit-nim-${i}" value="${escapeHtml(m.nim)}"></td>
+            <td><input type="text" id="edit-nama-${i}" value="${escapeHtml(m.nama)}"></td>
+            <td><input type="number" id="edit-tugas-${i}" value="${m.nilai[0]}"></td>
+            <td><input type="number" id="edit-uts-${i}" value="${m.nilai[1]}"></td>
+            <td><input type="number" id="edit-uas-${i}" value="${m.nilai[2]}"></td>
+            <td>${nilaiAkhir.toFixed(2)}</td>
+            <td>${grade}</td>
+            <td>${status}</td>
+            <td>
+              <button onclick="simpan(${i})">Simpan</button>
+              <button onclick="batalEdit(${i})">Batal</button>
+              <button onclick="hapus(${i})">Hapus</button>
+            </td>
+          </tr>`;
+        } else {
+          let nilaiAkhir = hitungNilaiAkhir(m.nilai);
+          let grade = tentukanGrade(nilaiAkhir);
+          let status = tentukanStatus(nilaiAkhir);
+          let statusClass = status === "LULUS" ? "lulus" : "tidak-lulus";
+
+          html += `<tr>
+            <td>${i + 1}</td>
+            <td>${escapeHtml(m.nim)}</td>
+            <td>${escapeHtml(m.nama)}</td>
+            <td>${m.nilai[0]}</td>
+            <td>${m.nilai[1]}</td>
+            <td>${m.nilai[2]}</td>
+            <td>${nilaiAkhir.toFixed(2)}</td>
+            <td>${grade}</td>
+            <td class="${statusClass}">${status}</td>
+            <td>
+              <button onclick="mulaiEdit(${i})">Edit</button>
+              <button onclick="hapus(${i})">Hapus</button>
+            </td>
+          </tr>`;
+        }
+      });
+
+      if (dataMahasiswa.length === 0) {
+        html += `<tr><td colspan="10"><center>Tidak ada data.</center></td></tr>`;
+      }
+
+      html += "</table>";
+      return html;
+    }
+    
+    function Tabel2() {
+      let nilaiDesc = [...mahasiswa].sort((a, b) => hitungNilaiAkhir(b.nilai) - hitungNilaiAkhir(a.nilai));
+      let html = "<h3>Tabel 2 - Ranking Nilai (Tertinggi → Terendah)</h3>";
+      html += "<table><tr><th>No</th><th>Nama</th><th>Nilai Akhir</th><th>Grade</th></tr>";
+
+      nilaiDesc.forEach((m, i) => {
+        let nilaiAkhir = hitungNilaiAkhir(m.nilai);
+        let grade = tentukanGrade(nilaiAkhir);
+
+        html += `<tr>
+          <td>${i + 1}</td>
+          <td>${escapeHtml(m.nama)}</td>
+          <td>${nilaiAkhir.toFixed(2)}</td>
+          <td>${grade}</td>
+        </tr>`;
+      });
+
+      if (nilaiDesc.length === 0) {
+        html += `<tr><td colspan="4"><center>Tidak ada data.</center></td></tr>`;
+      }
+
+      html += "</table>";
+      return html;
+    }
+
+    function Tabel3() {
+      let nilaiAsc = [...mahasiswa].sort((a, b) => hitungNilaiAkhir(a.nilai) - hitungNilaiAkhir(b.nilai));
+      let html = "<h3>Tabel 3 - Ranking Nilai (Terendah → Tertinggi)</h3>";
+      html += "<table><tr><th>No</th><th>Nama</th><th>Nilai Akhir</th><th>Grade</th></tr>";
+
+      nilaiAsc.forEach((m, i) => {
+        let nilaiAkhir = hitungNilaiAkhir(m.nilai);
+        let grade = tentukanGrade(nilaiAkhir);
+
+        html += `<tr>
+          <td>${i + 1}</td>
+          <td>${escapeHtml(m.nama)}</td>
+          <td>${nilaiAkhir.toFixed(2)}</td>
+          <td>${grade}</td>
+        </tr>`;
+      });
+
+      if (nilaiAsc.length === 0) {
+        html += `<tr><td colspan="4"><center>Tidak ada data.</center></td></tr>`;
+      }
+
+      html += "</table>";
+      return html;
+    }
+
+    function tampilkanInfo() {
+      if (mahasiswa.length === 0) {
+        document.getElementById("info").innerHTML = "<p>Belum ada data mahasiswa.</p>";
+        return;
+      }
+
+      let rataRata = hitungRataRata();
+      let terbaik = cariNilaiTertinggi();
+      let median = cariNilaiTengah();
+      let jumlahLulus = mahasiswa.filter((m) => hitungNilaiAkhir(m.nilai) >= 65).length;
+      let jumlahTidakLulus = mahasiswa.length - jumlahLulus;
+
+      let info = `
+        <p><b>Jumlah Data:</b> ${mahasiswa.length}</p>
+        <p><b>Rata-rata Nilai Akhir:</b> ${rataRata.toFixed(2)}</p>
+        <p><b>Mahasiswa Terbaik:</b> ${terbaik.nama} (${terbaik.nilai.toFixed(2)})</p>
+        <p><b>Nilai Tengah (Terdekat Rata-rata):</b> ${median.toFixed(2)}</p>
+        <p><b>Jumlah Lulus:</b> ${jumlahLulus} mahasiswa</p>
+        <p><b>Jumlah Tidak Lulus:</b> ${jumlahTidakLulus} mahasiswa</p>
+      `;
+
+      document.getElementById("info").innerHTML = info;
+    }
+
+    function tampilkanData() {
+      if (mahasiswa.length === 0) {
+        document.getElementById("hasil").innerHTML = "<p>Belum ada data mahasiswa.</p>";
+        document.getElementById("info").innerHTML = "";
+        return;
+      }
+
+      let html = "";
+      html += tampilkanTabel1(mahasiswa);
+      html += "<br>";
+      html += Tabel2();
+      html += "<br>";
+      html += Tabel3();
+
+      document.getElementById("hasil").innerHTML = html;
+      tampilkanInfo();
+    }
+
+    function urutkanNaik() {
+      if (mahasiswa.length === 0) {
+        Swal.fire({
+          icon: "warning",
+          title: "Tidak ada data",
+          text: "Belum ada data mahasiswa!",
+        });
+        return;
+      }
+
+      let dataSorted = [];
+      for (let i = 0; i < mahasiswa.length; i++) {
+        dataSorted.push(mahasiswa[i]);
+      }
+
+      for (let i = 0; i < dataSorted.length - 1; i++) {
+        for (let j = 0; j < dataSorted.length - i - 1; j++) {
+          let nilai1 = hitungNilaiAkhir(dataSorted[j].nilai);
+          let nilai2 = hitungNilaiAkhir(dataSorted[j + 1].nilai);
+          if (nilai1 > nilai2) {
+            let temp = dataSorted[j];
+            dataSorted[j] = dataSorted[j + 1];
+            dataSorted[j + 1] = temp;
+          }
+        }
+      }
+
+      let html = tampilkanTabel1(dataSorted);
+      document.getElementById("hasil").innerHTML = html;
+      tampilkanInfo();
+    }
+
+    function urutkanTurun() {
+      if (mahasiswa.length === 0) {
+        Swal.fire({
+          icon: "warning",
+          title: "Tidak ada data",
+          text: "Belum ada data mahasiswa!",
+        });
+        return;
+      }
+
+      let dataSorted = [];
+      for (let i = 0; i < mahasiswa.length; i++) {
+        dataSorted.push(mahasiswa[i]);
+      }
+
+      for (let i = 0; i < dataSorted.length - 1; i++) {
+        for (let j = 0; j < dataSorted.length - i - 1; j++) {
+          let nilai1 = hitungNilaiAkhir(dataSorted[j].nilai);
+          let nilai2 = hitungNilaiAkhir(dataSorted[j + 1].nilai);
+          if (nilai1 < nilai2) {
+            let temp = dataSorted[j];
+            dataSorted[j] = dataSorted[j + 1];
+            dataSorted[j + 1] = temp;
+          }
+        }
+      }
+
+      let html = tampilkanTabel1(dataSorted);
+      document.getElementById("hasil").innerHTML = html;
+      tampilkanInfo();
+    }
+  </script>
+</body>
+</html>
