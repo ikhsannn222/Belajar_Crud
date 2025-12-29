@@ -1,0 +1,41 @@
+<!DOCTYPE html> 
+<html> 
+<body> 
+ 
+<h3>Binary Search</h3> 
+<input type="number" id="cari"> 
+<button onclick="cari()">Cari</button> 
+<p id="hasil"></p> 
+ 
+<script> 
+function cari() { 
+    let data = [5, 10, 15, 20, 25, 30]; 
+    let target = parseInt(document.getElementById("cari").value); 
+ 
+    let kiri = 0; 
+    let kanan = data.length - 1; 
+    let ditemukan = false; 
+ 
+    while (kiri <= kanan) { 
+        let tengah = Math.floor((kiri + kanan) / 2); 
+ 
+        if (data[tengah] === target) { 
+            document.getElementById("hasil").innerText = 
+                "Data ditemukan di indeks ke-" + tengah; 
+            ditemukan = true; 
+            break; 
+        } else if (data[tengah] < target) { 
+            kiri = tengah + 1; 
+        } else { 
+            kanan = tengah - 1; 
+        } 
+    } 
+ 
+    if (!ditemukan) { 
+        document.getElementById("hasil").innerText = 
+"Data tidak ditemukan"; 
+} 
+} 
+</script> 
+</body> 
+</html> 

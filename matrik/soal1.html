@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h3>Jumlah Elemen Matriks</h3>
+    <button onclick="hitung()">Hitung</button>
+    <p id="hasil"></p>
+    <script>
+      function hitung() {
+        let matriks = [
+          [1, 2],
+          [3, 4],
+        ];
+        let total = 0;
+        for (let i = 0; i < matriks.length; i++) {
+          for (let j = 0; j < matriks[i].length; j++) {
+            total += matriks[i][j];
+          }
+        }
+        document.getElementById("hasil").innerText =
+          "Jumlah elemen matriks = " + total;
+      }
+    </script>
+  </body>
+</html>

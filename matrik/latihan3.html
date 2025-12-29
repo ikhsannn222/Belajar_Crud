@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistem Evaluasi Nilai Kelas</title>
+
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    input {
+      margin: 4px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 80%;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #000;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+  <h3>Input Nilai Mahasiswa</h3>
+
+  <input type="text" id="nama" placeholder="Nama Mahasiswa">
+  <input type="number" id="n1" placeholder="Nilai 1">
+  <input type="number" id="n2" placeholder="Nilai 2">
+  <input type="number" id="n3" placeholder="Nilai 3">
+  <br>
+
+  <button onclick="tambahMahasiswa()">Tambah Data</button>
+  <button onclick="urutkanData()">Urutkan & Evaluasi</button>
+
+  <h4>Pencarian Mahasiswa</h4>
+  <input type="text" id="cariNama" placeholder="Nama Mahasiswa">
+  <button onclick="cariMahasiswa()">Cari</button>
+
+  <p id="rataKelas"></p>
+  <p id="top3"></p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Ranking</th>
+        <th>Nama</th>
+        <th>Rata-rata</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="tabelHasil"></tbody>
+  </table>
+
+  <script>
+    let data = [];
+
+    function tambahMahasiswa() {
+      let nama = document.getElementById("nama").value;
+      let n1 = parseFloat(document.getElementById("n1").value);
+      let n2 = parseFloat(document.getElementById("n2").value);
+      let n3 = parseFloat(document.getElementById("n3").value);
+
+      if (nama === "" || isNaN(n1) || isNaN(n2) || isNaN(n3)) {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal",
+          text: "Semua data harus diisi!"
+        });
+        return;
+      }
+
+        if (n1 < 0 || n1 > 100 || n2 < 0 || n2 > 100 || n3 < 0 || n3 > 100) {
+        Swal.fire({
+          icon: "error",
+          title: "Nilai tidak valid",
+          text: "Nilai harus antara 0-100!",
+        });
+        return;
+      }
+
+      let rata = (n1 + n2 + n3) / 3;
+      let status = rata >= 70 ? "LULUS" : "TIDAK LULUS";
+
+      data.push([nama, n1, n2, n3, rata, status]);
+
+      tampilkanData();
+
+      document.getElementById("nama").value = "";
+      document.getElementById("n1").value = "";
+      document.getElementById("n2").value = "";
+      document.getElementById("n3").value = "";
+
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil",
+        text: "Data mahasiswa ditambahkan",
+        timer: 1500,
+        showConfirmButton: false
+      });
+    }
+
+    // Bubble Sort berdasarkan rata-rata (DESC)
+    function urutkanData() {
+      for (let i = 0; i < data.length - 1; i++) {
+        for (let j = 0; j < data.length - 1 - i; j++) {
+          if (data[j][4] < data[j + 1][4]) {
+            let temp = data[j];
+            data[j] = data[j + 1];
+            data[j + 1] = temp;
+          }
+        }
+      }
+
+      tampilkanData();
+      tampilkanTop3();
+      hitungRataKelas();
+
+      Swal.fire({
+        icon: "info",
+        title: "Selesai",
+        text: "Data berhasil diurutkan dan dievaluasi"
+      });
+    }
+
+    function tampilkanData() {
+      let tbody = document.getElementById("tabelHasil");
+      tbody.innerHTML = "";
+
+      for (let i = 0; i < data.length; i++) {
+        tbody.innerHTML += `
+          <tr>
+            <td>${i + 1}</td>
+            <td>${data[i][0]}</td>
+            <td>${data[i][4].toFixed(2)}</td>
+            <td>${data[i][5]}</td>
+          </tr>
+        `;
+      }
+    }
+
+    function tampilkanTop3() {
+      let hasil = "Top 3 Mahasiswa: ";
+      let batas = data.length < 3 ? data.length : 3;
+
+      for (let i = 0; i < batas; i++) {
+        hasil += `${data[i][0]} (${data[i][4].toFixed(2)}) `;
+      }
+
+      document.getElementById("top3").innerText = hasil;
+    }
+
+    function hitungRataKelas() {
+      let total = 0;
+      for (let i = 0; i < data.length; i++) {
+        total += data[i][4];
+      }
+      let rataKelas = total / data.length;
+      document.getElementById("rataKelas").innerText =
+        "Rata-rata Nilai Kelas: " + rataKelas.toFixed(2);
+    }
+
+
+    function cariMahasiswa() {
+      let namaCari = document.getElementById("cariNama").value.toLowerCase();
+      let ditemukan = false;
+
+      for (let i = 0; i < data.length; i++) {
+        if (data[i][0].toLowerCase() === namaCari) {
+          Swal.fire({
+            icon: "success",
+            title: "Mahasiswa Ditemukan",
+            text: `Rata-rata: ${data[i][4].toFixed(2)} | Status: ${data[i][5]}`
+          });
+          ditemukan = true;
+          break;
+        }
+      }
+
+      if (!ditemukan) {
+        Swal.fire({
+          icon: "error",
+          title: "Tidak Ditemukan",
+          text: "Mahasiswa tidak ditemukan"
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>

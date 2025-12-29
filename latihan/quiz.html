@@ -191,7 +191,6 @@
       }
       return { nama: mahasiswaTerbaik, nilai: maxNilai };
     }
-
     function cariNilaiTengah() {
       if (mahasiswa.length === 0) return 0;
 
@@ -477,70 +476,6 @@
       html += "<br>";
       html += Tabel3();
 
-      document.getElementById("hasil").innerHTML = html;
-      tampilkanInfo();
-    }
-
-    function urutkanNaik() {
-      if (mahasiswa.length === 0) {
-        Swal.fire({
-          icon: "warning",
-          title: "Tidak ada data",
-          text: "Belum ada data mahasiswa!",
-        });
-        return;
-      }
-
-      let dataSorted = [];
-      for (let i = 0; i < mahasiswa.length; i++) {
-        dataSorted.push(mahasiswa[i]);
-      }
-
-      for (let i = 0; i < dataSorted.length - 1; i++) {
-        for (let j = 0; j < dataSorted.length - i - 1; j++) {
-          let nilai1 = hitungNilaiAkhir(dataSorted[j].nilai);
-          let nilai2 = hitungNilaiAkhir(dataSorted[j + 1].nilai);
-          if (nilai1 > nilai2) {
-            let temp = dataSorted[j];
-            dataSorted[j] = dataSorted[j + 1];
-            dataSorted[j + 1] = temp;
-          }
-        }
-      }
-
-      let html = tampilkanTabel1(dataSorted);
-      document.getElementById("hasil").innerHTML = html;
-      tampilkanInfo();
-    }
-
-    function urutkanTurun() {
-      if (mahasiswa.length === 0) {
-        Swal.fire({
-          icon: "warning",
-          title: "Tidak ada data",
-          text: "Belum ada data mahasiswa!",
-        });
-        return;
-      }
-
-      let dataSorted = [];
-      for (let i = 0; i < mahasiswa.length; i++) {
-        dataSorted.push(mahasiswa[i]);
-      }
-
-      for (let i = 0; i < dataSorted.length - 1; i++) {
-        for (let j = 0; j < dataSorted.length - i - 1; j++) {
-          let nilai1 = hitungNilaiAkhir(dataSorted[j].nilai);
-          let nilai2 = hitungNilaiAkhir(dataSorted[j + 1].nilai);
-          if (nilai1 < nilai2) {
-            let temp = dataSorted[j];
-            dataSorted[j] = dataSorted[j + 1];
-            dataSorted[j + 1] = temp;
-          }
-        }
-      }
-
-      let html = tampilkanTabel1(dataSorted);
       document.getElementById("hasil").innerHTML = html;
       tampilkanInfo();
     }

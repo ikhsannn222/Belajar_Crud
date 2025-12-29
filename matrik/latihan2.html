@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Penjualan Produk</title>
+
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    input {
+      margin: 4px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 70%;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #000;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+  <h3>Input Data Penjualan Produk</h3>
+
+  <input type="text" id="produk" placeholder="Nama Produk">
+  <input type="number" id="jumlah" placeholder="Jumlah Terjual">
+  <input type="number" id="harga" placeholder="Harga Satuan">
+  <br>
+
+  <button onclick="tambahProduk()">Tambah Data</button>
+
+  <h4>Pencarian Produk</h4>
+  <input type="text" id="cariProduk" placeholder="Nama Produk">
+  <button onclick="cariProduk()">Cari</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Produk</th>
+        <th>Jumlah Terjual</th>
+        <th>Harga Satuan</th>
+        <th>Total Pendapatan</th>
+      </tr>
+    </thead>
+    <tbody id="tabelHasil"></tbody>
+  </table>
+
+  <script>
+    let penjualan = [];
+
+    function tambahProduk() {
+      let produk = document.getElementById("produk").value;
+      let jumlah = parseInt(document.getElementById("jumlah").value);
+      let harga = parseInt(document.getElementById("harga").value);
+
+      if (produk === "" || isNaN(jumlah) || isNaN(harga)) {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal",
+          text: "Semua data harus diisi!"
+        });
+        return;
+      }
+
+      let total = jumlah * harga;
+      penjualan.push([produk, jumlah, harga, total]);
+
+      tampilkanData();
+
+      document.getElementById("produk").value = "";
+      document.getElementById("jumlah").value = "";
+      document.getElementById("harga").value = "";
+
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil",
+        text: "Data produk berhasil ditambahkan",
+        timer: 1500,
+        showConfirmButton: false
+      });
+    }
+
+    function tampilkanData() {
+      let tbody = document.getElementById("tabelHasil");
+      tbody.innerHTML = "";
+
+      for (let i = 0; i < penjualan.length; i++) {
+        tbody.innerHTML += `
+          <tr>
+            <td>${i + 1}</td>
+            <td>${penjualan[i][0]}</td>
+            <td>${penjualan[i][1]}</td>
+            <td>Rp ${penjualan[i][2].toLocaleString()}</td>
+            <td>Rp ${penjualan[i][3].toLocaleString()}</td>
+          </tr>
+        `;
+      }
+    }
+
+    function cariProduk() {
+      let nama = document.getElementById("cariProduk").value.toLowerCase();
+      let ditemukan = false;
+
+      for (let i = 0; i < penjualan.length; i++) {
+        if (penjualan[i][0].toLowerCase() === nama) {
+          Swal.fire({
+            icon: "success",
+            title: "Produk Ditemukan",
+            text: `Total Pendapatan: Rp ${penjualan[i][3].toLocaleString()}`
+          });
+          ditemukan = true;
+          break;
+        }
+      }
+
+      if (!ditemukan) {
+        Swal.fire({
+          icon: "error",
+          title: "Tidak Ditemukan",
+          text: "Produk tidak ditemukan"
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>

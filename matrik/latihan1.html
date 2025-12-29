@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Analisis Nilai Mahasiswa</title>
+
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    input {
+      margin: 4px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 70%;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #000;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+  <h3>Input Data Mahasiswa</h3>
+
+  <input type="text" id="nim" placeholder="NIM">
+  <input type="text" id="nama" placeholder="Nama">
+  <input type="number" id="tugas" placeholder="Nilai Tugas">
+  <input type="number" id="uts" placeholder="Nilai UTS">
+  <input type="number" id="uas" placeholder="Nilai UAS">
+  <br>
+
+  <button onclick="tambahMahasiswa()">Tambah Data</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Peringkat</th>
+        <th>NIM</th>
+        <th>Nama</th>
+        <th>Nilai Akhir</th>
+      </tr>
+    </thead>
+    <tbody id="tabelHasil"></tbody>
+  </table>
+
+  <script>
+    let mahasiswa = [];
+
+    function tambahMahasiswa() {
+      let nim = document.getElementById("nim").value;
+      let nama = document.getElementById("nama").value;
+      let tugas = parseFloat(document.getElementById("tugas").value);
+      let uts = parseFloat(document.getElementById("uts").value);
+      let uas = parseFloat(document.getElementById("uas").value);
+
+      if (nim === "" || nama === "" || isNaN(tugas) || isNaN(uts) || isNaN(uas)) {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal",
+          text: "Semua data harus diisi!"
+        });
+        return;
+      }
+
+        if (tugas < 0 || tugas > 100 || uts < 0 || uts > 100 || uas < 0 || uas > 100) {
+        Swal.fire({
+          icon: "error",
+          title: "Nilai tidak valid",
+          text: "Nilai harus antara 0-100!",
+        });
+        return;
+      }
+
+      mahasiswa.push({
+        nim: nim,
+        nama: nama,
+        nilai: [tugas, uts, uas],
+        nilaiAkhir: (tugas * 0.3) + (uts * 0.3) + (uas * 0.4)
+      });
+
+      tampilkanData();
+
+      // reset input
+      document.getElementById("nim").value = "";
+      document.getElementById("nama").value = "";
+      document.getElementById("tugas").value = "";
+      document.getElementById("uts").value = "";
+      document.getElementById("uas").value = "";
+
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil",
+        text: "Data mahasiswa berhasil ditambahkan",
+        timer: 1500,
+        showConfirmButton: false
+      });
+    }
+    function tampilkanData() {
+      let tbody = document.getElementById("tabelHasil");
+      tbody.innerHTML = "";
+
+      for (let i = 0; i < mahasiswa.length; i++) {
+        tbody.innerHTML += `
+          <tr>
+            <td>${i + 1}</td>
+            <td>${mahasiswa[i].nim}</td>
+            <td>${mahasiswa[i].nama}</td>
+            <td>${mahasiswa[i].nilaiAkhir.toFixed(2)}</td>
+          </tr>
+        `;
+      }
+    }
+  </script>
+
+</body>
+</html>

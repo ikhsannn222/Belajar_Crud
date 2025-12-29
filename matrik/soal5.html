@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h3>Analisis Nilai Mahasiswa</h3>
+    <button onclick="analisis()">Proses</button>
+    <pre id="hasil"></pre>
+    <script>
+      function analisis() {
+      let mahasiswa = ["Andi", "Budi", "Citra"];
+      let nilai = [
+      [80, 85, 90],
+      [70, 75, 65],
+      [90, 95, 85]
+      ];
+      let rata = [];
+      let max = 0;
+      let terbaik = "";
+      for (let i = 0; i < nilai.length; i++) {
+      let total = 0;
+      for (let j = 0; j < nilai[i].length; j++) {
+      total += nilai[i][j];
+      }
+      rata[i] = total / nilai[i].length;
+      if (rata[i] > max) {
+      max = rata[i];
+      terbaik = mahasiswa[i];
+      }
+      }
+      let cari = "Citra";
+      let ditemukan = false;
+      for (let i = 0; i < mahasiswa.length; i++) {
+      if (mahasiswa[i] === cari) {
+      ditemukan = true;
+      break;
+      }
+      }
+      document.getElementById("hasil").innerText =
+      "Rata-rata Nilai:\n" + JSON.stringify(rata, null, 2) +
+      "\n\nMahasiswa Terbaik: " + terbaik +
+      "\nPencarian 'Citra': " + (ditemukan ? "Ditemukan" : "Tidak Ditemukan");
+      }
+    </script>
+  </body>
+</html>

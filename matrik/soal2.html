@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h3>Penjumlahan & Transpose Matriks</h3>
+    <button onclick="proses()">Proses</button>
+    <pre id="hasil"></pre>
+    <script>
+      function proses() {
+        let A = [
+          [1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9],
+        ];
+        let B = [
+          [9, 8, 7],
+          [6, 5, 4],
+          [3, 2, 1],
+        ];
+        let C = [];
+        let T = [];
+        // Penjumlahan matriks
+        for (let i = 0; i < A.length; i++) {
+          C[i] = [];
+          for (let j = 0; j < A[i].length; j++) {
+            C[i][j] = A[i][j] + B[i][j];
+          }
+        }
+        // Transpose
+        for (let i = 0; i < C[0].length; i++) {
+          T[i] = [];
+          for (let j = 0; j < C.length; j++) {
+            T[i][j] = C[j][i];
+          }
+        }
+        document.getElementById("hasil").innerText =
+          "Hasil Penjumlahan:\n" +
+          JSON.stringify(C, null, 2) +
+          "\n\nTranspose:\n" +
+          JSON.stringify(T, null, 2);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Transpose Matriks</title>
+  </head>
+  <body>
+    <h3>Transpose Matriks</h3>
+    <button onclick="transposeMatriks()">Hitung</button>
+    <pre id="hasil"></pre>
+
+    <script>
+      function transpose(matriks) {
+        let hasil = [];
+        for (let i = 0; i < matriks[0].length; i++) {
+          hasil[i] = [];
+          for (let j = 0; j < matriks.length; j++) {
+            hasil[i][j] = matriks[j][i];
+          }
+        }
+        return hasil;
+      }
+
+      function transposeMatriks() {
+        let A = [
+          [1, 2, 3],
+          [4, 5, 6],
+        ];
+
+        let hasilTranspose = transpose(A);
+        document.getElementById("hasil").innerText =
+          JSON.stringify(hasilTranspose, null, 2);
+      }
+    </script>
+  </body>
+</html>

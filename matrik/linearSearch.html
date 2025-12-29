@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Linear Search</title>
+  </head>
+  <body>
+    <h3>Pencarian Linear</h3>
+    <input type="number" id="cari" placeholder="Cari Nilai" />
+    <button onclick="cariData()">Cari</button>
+    <p id="hasil"></p>
+    <script>
+      function cariData() {
+        let data = [60, 70, 80, 90, 100];
+        let target = parseInt(document.getElementById("cari").value);
+        let ditemukan = false;
+        for (let i = 0; i < data.length; i++) {
+          if (data[i] === target) {
+            document.getElementById("hasil").innerText =
+              "Data ditemukan di indeks ke-" + i;
+            ditemukan = true;
+            break;
+          }
+        }
+        if (!ditemukan) {
+          document.getElementById("hasil").innerText = "Data tidak ditemukan";
+        }
+      }
+    </script>
+  </body>
+</html>
