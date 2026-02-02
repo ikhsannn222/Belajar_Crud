@@ -2,42 +2,105 @@
 <html>
   <body>
     <h3>Analisis Nilai Mahasiswa</h3>
+
+    <input type="text" id="nama" placeholder="Nama Mahasiswa">
+    <input type="number" id="n1" placeholder="Nilai 1">
+    <input type="number" id="n2" placeholder="Nilai 2">
+    <input type="number" id="n3" placeholder="Nilai 3">
+    <button onclick="tambah()">Tambah Data</button>
+
+    <br>
+    <table border="1" cellpadding="5">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Nama</th>
+          <th>Nilai 1</th>
+          <th>Nilai 2</th>
+          <th>Nilai 3</th>
+          <th>Rata-rata</th>
+        </tr>
+      </thead>
+      <tbody id="tabelData"></tbody>
+    </table>
+
+    <br>
     <button onclick="analisis()">Proses</button>
     <pre id="hasil"></pre>
+
     <script>
+      let mahasiswa = [];
+      let nilai = [];
+
+      function tambah() {
+        let nama = document.getElementById("nama").value;
+        let n1 = Number(document.getElementById("n1").value);
+        let n2 = Number(document.getElementById("n2").value);
+        let n3 = Number(document.getElementById("n3").value);
+
+        mahasiswa.push(nama);
+        nilai.push([n1, n2, n3]);
+
+        tampilTabel();
+        
+        document.getElementById("nama").value = "";
+        document.getElementById("n1").value = "";
+        document.getElementById("n2").value = "";
+        document.getElementById("n3").value = "";
+      }
+
+      function tampilTabel() {
+        let tabel = "";
+        for (let i = 0; i < mahasiswa.length; i++) {
+          let total = 0;
+          for (let j = 0; j < nilai[i].length; j++) {
+            total += nilai[i][j];
+          }
+          let rata = total / nilai[i].length;
+
+          tabel += `
+            <tr>
+              <td>${i + 1}</td>
+              <td>${mahasiswa[i]}</td>
+              <td>${nilai[i][0]}</td>
+              <td>${nilai[i][1]}</td>
+              <td>${nilai[i][2]}</td>
+              <td>${rata.toFixed(2)}</td>
+            </tr>
+          `;
+        }
+        document.getElementById("tabelData").innerHTML = tabel;
+      }
+
       function analisis() {
-      let mahasiswa = ["Andi", "Budi", "Citra"];
-      let nilai = [
-      [80, 85, 90],
-      [70, 75, 65],
-      [90, 95, 85]
-      ];
-      let rata = [];
-      let max = 0;
-      let terbaik = "";
-      for (let i = 0; i < nilai.length; i++) {
-      let total = 0;
-      for (let j = 0; j < nilai[i].length; j++) {
-      total += nilai[i][j];
-      }
-      rata[i] = total / nilai[i].length;
-      if (rata[i] > max) {
-      max = rata[i];
-      terbaik = mahasiswa[i];
-      }
-      }
-      let cari = "Citra";
-      let ditemukan = false;
-      for (let i = 0; i < mahasiswa.length; i++) {
-      if (mahasiswa[i] === cari) {
-      ditemukan = true;
-      break;
-      }
-      }
-      document.getElementById("hasil").innerText =
-      "Rata-rata Nilai:\n" + JSON.stringify(rata, null, 2) +
-      "\n\nMahasiswa Terbaik: " + terbaik +
-      "\nPencarian 'Citra': " + (ditemukan ? "Ditemukan" : "Tidak Ditemukan");
+        let totalSemua = 0;
+        let jumlahNilai = 0;
+        let maxRata = 0;
+        let terbaik = "";
+
+        for (let i = 0; i < nilai.length; i++) {
+          let total = 0;
+          for (let j = 0; j < nilai[i].length; j++) {
+            total += nilai[i][j];
+            totalSemua += nilai[i][j];
+            jumlahNilai++;
+          }
+
+          let rata = total / nilai[i].length;
+
+          if (rata > maxRata) {
+            maxRata = rata;
+            terbaik = mahasiswa[i];
+          }
+        }
+
+        let rataKeseluruhan = totalSemua / jumlahNilai;
+
+        document.getElementById("hasil").innerText =
+          "Jumlah Mahasiswa : " + mahasiswa.length +
+          "\nRata-rata Nilai Keseluruhan : " + rataKeseluruhan.toFixed(2) +
+          "\nMahasiswa Terbaik : " + terbaik +
+          " (" + maxRata.toFixed(2) + ")";
       }
     </script>
   </body>

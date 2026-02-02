@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Analisis Nilai Mahasiswa</title>
 
-  <!-- SweetAlert2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
@@ -12,7 +11,7 @@
       font-family: Arial, sans-serif;
     }
     input {
-      margin: 4px;
+      margin: 6px;
     }
     table {
       border-collapse: collapse;
@@ -25,7 +24,7 @@
       text-align: center;
     }
     th {
-      background-color: #f2f2f2;
+      background-color: #c7b9b9;
     }
   </style>
 </head>
@@ -73,7 +72,7 @@
         return;
       }
 
-        if (tugas < 0 || tugas > 100 || uts < 0 || uts > 100 || uas < 0 || uas > 100) {
+      if (tugas < 0 || tugas > 100 || uts < 0 || uts > 100 || uas < 0 || uas > 100) {
         Swal.fire({
           icon: "error",
           title: "Nilai tidak valid",
@@ -85,13 +84,11 @@
       mahasiswa.push({
         nim: nim,
         nama: nama,
-        nilai: [tugas, uts, uas],
         nilaiAkhir: (tugas * 0.3) + (uts * 0.3) + (uas * 0.4)
       });
 
       tampilkanData();
 
-      // reset input
       document.getElementById("nim").value = "";
       document.getElementById("nama").value = "";
       document.getElementById("tugas").value = "";
@@ -106,9 +103,12 @@
         showConfirmButton: false
       });
     }
+
     function tampilkanData() {
       let tbody = document.getElementById("tabelHasil");
       tbody.innerHTML = "";
+
+      mahasiswa.sort((a, b) => b.nilaiAkhir - a.nilaiAkhir);
 
       for (let i = 0; i < mahasiswa.length; i++) {
         tbody.innerHTML += `

@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Aplikasi Nilai Mahasiswa</title>
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Input Data Mahasiswa</h2>
+
+    <form id="formMahasiswa">
+      NIM: <input type="text" id="nim" required /> 
+      Nama:<input type="text" id="nama" required /><br /><br />
+
+      <b>Mata Kuliah 1</b>
+      Tugas <input type="number" id="m1t" /> 
+      UTS <input type="number" id="m1u" />
+      UAS<input type="number" id="m1a" /><br />
+
+      <b>Mata Kuliah 2</b>
+      Tugas <input type="number" id="m2t" /> 
+      UTS<input type="number" id="m2u" /> 
+      UAS<input type="number" id="m2a" /><br />
+
+      <b>Mata Kuliah 3</b>
+      Tugas <input type="number" id="m3t" /> 
+      UTS<input type="number" id="m3u" /> 
+      UAS<input type="number" id="m3a" /><br /><br />
+
+      <button type="submit">Tambah Data</button>
+    </form>
+
+    <hr/>
+
+    <h3>Pencarian Mahasiswa (NIM)</h3>
+    <input type="text" id="cariNim" />
+    <button onclick="cariMahasiswa()">Cari</button>
+    <p id="hasilCari"></p>
+
+    <hr />
+
+    <button onclick="urutkanData()">Urutkan Nilai Tertinggi</button>
+
+    <h2>Data Mahasiswa</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>NIM</th>
+          <th>Nama</th>
+          <th>Rata-rata</th>
+          <th>Grade</th>
+        </tr>
+      </thead>
+      <tbody id="tabelMahasiswa"></tbody>
+    </table>
+
+    <script>
+      let dataMahasiswa = [];
+
+      window.onload = function () {
+        muatDariArsip();
+        tampilkanData();
+      };
+
+      document.getElementById("formMahasiswa").addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          let mahasiswa = {
+            nim: document.getElementById("nim").value,
+            nama: document.getElementById("nama").value,
+            nilai: [
+              [Number(m1t.value), Number(m1u.value), Number(m1a.value)],
+              [Number(m2t.value), Number(m2u.value), Number(m2a.value)],
+              [Number(m3t.value), Number(m3u.value), Number(m3a.value)],
+            ],
+            rata: 0,
+            grade: "",
+          };
+
+          mahasiswa.rata = hitungRataRata(mahasiswa.nilai);
+          mahasiswa.grade = tentukanGrade(mahasiswa.rata);
+
+          dataMahasiswa.push(mahasiswa);
+          simpanKeArsip();
+          tampilkanData();
+          this.reset();
+        });
+
+      function hitungRataRata(matriksNilai) {
+        let total = hitungTotalRekursif(matriksNilai, 0, 0);
+        let jumlahNilai = matriksNilai.length * matriksNilai[0].length;
+        return (total / jumlahNilai).toFixed(2);
+      }
+
+      function hitungTotalRekursif(matriks, i, j) {
+        if (i >= matriks.length) return 0;
+        if (j >= matriks[i].length)
+          return hitungTotalRekursif(matriks, i + 1, 0);
+        return matriks[i][j] + hitungTotalRekursif(matriks, i, j + 1);
+      }
+
+      function tentukanGrade(rata) {
+        if (rata >= 85) return "A";
+        else if (rata >= 70) return "B";
+        else if (rata >= 60) return "C";
+        else return "D";
+      }
+
+      function tampilkanData() {
+        let tbody = document.getElementById("tabelMahasiswa");
+        tbody.innerHTML = "";
+
+        for (let i = 0; i < dataMahasiswa.length; i++) {
+          let tr = document.createElement("tr");
+          tr.innerHTML = `
+      <td>${dataMahasiswa[i].nim}</td>
+      <td>${dataMahasiswa[i].nama}</td>
+      <td>${dataMahasiswa[i].rata}</td>
+      <td>${dataMahasiswa[i].grade}</td>
+    `;
+          tbody.appendChild(tr);
+        }
+      }
+
+      function urutkanData() {
+        for (let i = 0; i < dataMahasiswa.length - 1; i++) {
+          for (let j = 0; j < dataMahasiswa.length - i - 1; j++) {
+            if (
+              Number(dataMahasiswa[j].rata) < Number(dataMahasiswa[j + 1].rata)
+            ) {
+              let temp = dataMahasiswa[j];
+              dataMahasiswa[j] = dataMahasiswa[j + 1];
+              dataMahasiswa[j + 1] = temp;
+            }
+          }
+        }
+        tampilkanData();
+      }
+
+      function cariMahasiswa() {
+        let nimCari = document.getElementById("cariNim").value;
+        let hasil = "Data tidak ditemukan";
+
+        for (let i = 0; i < dataMahasiswa.length; i++) {
+          if (dataMahasiswa[i].nim === nimCari) {
+            hasil = `Nama: ${dataMahasiswa[i].nama}, Rata-rata: ${dataMahasiswa[i].rata}, Grade: ${dataMahasiswa[i].grade}`;
+            break;
+          }
+        }
+
+        document.getElementById("hasilCari").innerText = hasil;
+      }
+
+      function simpanKeArsip() {
+        localStorage.setItem("dataMahasiswa", JSON.stringify(dataMahasiswa));
+      }
+
+      function muatDariArsip() {
+        let data = localStorage.getItem("dataMahasiswa");
+        if (data) {
+          dataMahasiswa = JSON.parse(data);
+        }
+      }
+    </script>
+  </body>
+</html>

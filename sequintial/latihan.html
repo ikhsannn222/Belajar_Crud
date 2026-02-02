@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sistem Evaluasi Akademik Mahasiswa</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #444;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f0f0f0;
+    }
+
+    input, button {
+      padding: 6px;
+      width: 100%;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .lulus {
+      color: green;
+      font-weight: bold;
+    }
+
+    .remedial {
+      color: orange;
+      font-weight: bold;
+    }
+
+    .tidak-lulus {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+
+<h3>Input Data Mahasiswa</h3>
+
+NIM:
+<input type="number" id="nim">
+
+Nama:
+<input type="text" id="nama">
+
+Nilai Mata Kuliah 1:
+<input type="number" id="n1">
+
+Nilai Mata Kuliah 2:
+<input type="number" id="n2">
+
+Nilai Mata Kuliah 3:
+<input type="number" id="n3">
+
+Jumlah Kehadiran (0-14):
+<input type="number" id="kehadiran">
+
+<button onclick="tambahMahasiswa()">Tambah Data</button>
+
+<hr>
+
+<div id="hasil"></div>
+
+<script>
+  let mahasiswa = [];
+  const totalPertemuan = 14;
+
+  function jumlahRekursif(arr, index) {
+    if (index === arr.length) return 0;
+    return arr[index] + jumlahRekursif(arr, index + 1);
+  }
+
+  function tambahMahasiswa() {
+    let nim = document.getElementById("nim").value;
+    let nama = document.getElementById("nama").value;
+
+    let nilai = [
+      parseFloat(document.getElementById("n1").value),
+      parseFloat(document.getElementById("n2").value),
+      parseFloat(document.getElementById("n3").value)
+    ];
+
+    let hadir = parseInt(document.getElementById("kehadiran").value);
+
+    if (
+      !nim || !nama ||
+      isNaN(nilai[0]) || isNaN(nilai[1]) || isNaN(nilai[2]) ||
+      isNaN(hadir) || hadir < 0 || hadir > 14
+    ) {
+      Swal.fire("Error", "Data tidak valid!", "warning");
+      return;
+    }
+
+    mahasiswa.push({
+      nim: nim,
+      nama: nama,
+      nilai: nilai,
+      hadir: hadir
+    });
+
+    Swal.fire("Sukses", "Data berhasil ditambahkan", "success");
+    document.getElementById("nim").value = "";
+    document.getElementById("nama").value = "";
+    document.getElementById("n1").value = "";
+    document.getElementById("n2").value = "";
+    document.getElementById("n3").value = "";
+    document.getElementById("kehadiran").value = "";
+
+    tampilkanData();
+  }
+  function tentukanStatus(rata, persenHadir) {
+    if (rata >= 75 && persenHadir >= 60) {
+      return "LULUS";
+    } else if (rata >= 60 && rata <= 74) {
+      return "REMEDIAL";
+    } else {
+      return "TIDAK LULUS";
+    }
+  }
+  
+   
+
+
+  function tampilkanData() {
+    let html = `
+      <h3>Hasil Evaluasi Mahasiswa</h3>
+      <table>
+        <tr>
+          <th>No</th>
+          <th>NIM</th>
+          <th>Nama</th>
+          <th>Total Nilai</th>
+          <th>Rata-rata</th>
+          <th>Kehadiran</th>
+          <th>Status</th>
+        </tr>
+    `;
+
+    for (let i = 0; i < mahasiswa.length; i++) {
+      let total = jumlahRekursif(mahasiswa[i].nilai, 0);
+      let rata = total / mahasiswa[i].nilai.length;
+      let persenHadir = (mahasiswa[i].hadir / totalPertemuan) * 100;
+
+      let status = tentukanStatus(rata, persenHadir);
+
+      let kelas =
+        status === "LULUS" ? "lulus" :
+        status === "REMEDIAL" ? "remedial" :
+        "tidak-lulus";
+
+      html += `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${mahasiswa[i].nim}</td>
+          <td>${mahasiswa[i].nama}</td>
+          <td>${total}</td>
+          <td>${rata.toFixed(2)}</td>
+          <td>${mahasiswa[i].hadir}/14 (${persenHadir.toFixed(1)}%)</td>
+          <td class="${kelas}">${status}</td>
+        </tr>
+      `;
+    }
+
+    html += "</table>";
+    document.getElementById("hasil").innerHTML = html;
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sequential Algorithm - Nilai Akhir</title>
+  </head>
+  <body>
+    <h3>Perhitungan Nilai Akhir Mahasiswa</h3>
+    Tugas: <input type="number" id="tugas" /><br /><br />
+    UTS: <input type="number" id="uts" /><br /><br />
+    UAS: <input type="number" id="uas" /><br /><br />
+    <button onclick="hitungNilai()">Hitung</button>
+    <p id="hasil"></p>
+    <script>
+      function hitungNilai() {
+        const tugas = parseFloat(document.getElementById("tugas").value);
+        const uts = parseFloat(document.getElementById("uts").value);
+        const uas = parseFloat(document.getElementById("uas").value);
+        const nilaiAkhir = 0.3 * tugas + 0.3 * uts + 0.4 * uas;
+        document.getElementById("hasil").innerHTML =
+          "Nilai Akhir: " + nilaiAkhir.toFixed(2);
+      }
+    </script>
+  </body>
+</html>
